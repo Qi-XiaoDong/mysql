@@ -86,11 +86,15 @@
 
 - 查询表中的单个字段：
 
-> 查询employees表中的last_name字段 ```SELECT last_name FROM employees```
+> 查询employees表中的last_name字段 
+
+```SELECT last_name FROM employees```
 
 - 查询表中的多个字段
 
-> 查询employees表中的last_name salary email多个字段 ```SELECT last_name, salary, email FROM employees```
+> 查询employees表中的last_name salary email多个字段 
+
+```SELECT last_name, salary, email FROM employees```
 
 - 查询表中的所有字段
 
@@ -104,7 +108,7 @@
 
 - 查询表达式
 
-`` SELECT 2 * 3````
+```SELECT 2 * 3```
 
 - 查询函数：相当于调用函数
 
@@ -252,12 +256,6 @@ SELECT null+10;  一方为null 则结果肯定为nul
 
 ```查看字符集： show variables like "%%"```
 
-2. <span id="jump">concat(): 内置函数,作为拼接字符使用</span>
-
-> 查询员工名和姓连成一个字段 并显示为 姓名
-
-```SELECT CONCAT(last_name, first_name) as 姓名```
-
 3. upper、lower： 大小写转换
 
 4. substr ： 截取字符
@@ -319,6 +317,11 @@ SELECT null+10;  一方为null 则结果肯定为nul
 
 - 流程控制函数 [https://blog.csdn.net/QQQZSJ/article/details/104108424]
 
+#### 分组函数做统计使用(聚合函数)
+
+
+> 文章：[https://blog.csdn.net/weixin_43064399/article/details/89406780]
+
 - ifnull(字段名, 为null时显示的值): 判断是否为空
 
 > commission_pct 为null 时显示为0；
@@ -327,5 +330,83 @@ SELECT null+10;  一方为null 则结果肯定为nul
 
 - ISNULL("字段")判断该字段的值是否为null 1 true 0 false
 
+- <span id="jump">concat(): 内置函数,作为拼接字符使用</span>
 
-#### 分组函数做统计使用(聚合函数)
+> 查询员工名和姓连成一个字段 并显示为 姓名
+
+```SELECT CONCAT(last_name, first_name) as 姓名```
+
+### 分组查询
+
+- GROUP BY 子句语法：将表中的数据分成若干个组
+
+```js
+SELECT 分组函数(), 列名 From 表名 WHERE 分组前筛选条件 GROUP BY 筛选列名;
+// 对分组查询的结果在 HAVINg 
+SELECT 分组函数(), 列名 From 表名 WHERE 分组前筛选条件 GROUP BY 筛选列名 HAVINg 分组后筛选条件;
+```
+
+- 分组筛选条件分为两类
+
+> 优先使用分组前筛选
+
+1. 分组前筛选 WHERE
+
+> 筛选的数据在原始表中
+
+2. 分组后筛选 HAVING
+
+> 筛选的数据在分组后的筛选集
+> 分组函数做条件肯定放在HAVING中
+
+- 按表达式或者函数分组
+
+- 按多个字段分组
+
+```js
+SELECT 分组函数(), 列名1, 列名2 From 表名 WHERE 分组前筛选条件 GROUP BY 筛选列名1, 筛选列名2;
+```
+
+- 分组添加排序
+
+```js
+SELECT 分组函数(), 列名 From 表名 WHERE 分组前筛选条件 GROUP BY 筛选列名 HAVINg 分组后筛选条件 ORDER BY 排序列名;
+```
+
+### 连接查询(多表查询)
+
+> 当查询字段来自多个表时，使用连接查询
+
+
+> 笛卡尔乘积现象： 表1 M行 表2 N行， 结果 M*N 行
+
+> 发生原因： 没有有效的链接条件
+
+- 连接分类：
+
+1. 内连接：
+    1. 等值连接
+    2. 非等值连接
+    3. 自连接
+
+2. 外连接
+    1. 左外连接
+    2. 右外连接
+    3. 全外连接 (不支持)
+
+3. 交叉连接
+
+- 等值连接
+
+> 当两张表中的字段名字有冲突，可以使用表名.字段限制
+
+> 为了简单可以给表起别名 FROM 表名 AS 别名
+
+> 起了别名后再SELECT中只能使用别名
+
+```SELECT 字段1, 字段2 FROM 表1, 表2 WHERE 表1.XXX = 表2.XXX```
+
+> 添加筛选
+
+```SELECT 字段1, 字段2 FROM 表1, 表2 WHERE 表1.XXX = 表2.XXX AND 筛选条件```
+
